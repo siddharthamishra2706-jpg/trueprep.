@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TruePrep — Learn from Those Who've Been There</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --black: #0a0a0a; --white: #f5f2ec;
+    --green: #22C55E; --green-light: #4ADE80;
+    --gold: #86EFAC; --deep: #0a1a0f; --muted: #5a7a63;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'DM Sans', sans-serif; overflow-x: hidden; cursor: none; }
+
+  /* UNDER CONSTRUCTION BANNER */
+  .construction-bar {
+    background: linear-gradient(90deg, #f59e0b, #d97706);
+    color: #000; text-align: center;
+    padding: 0.5rem 1rem; font-size: 0.82rem; font-weight: 600;
+    letter-spacing: 0.03em; position: relative; z-index: 200;
+  }
+  .construction-bar span { opacity: 0.7; font-weight: 400; }
+
+  /* CURSOR */
+  .cursor { width:12px;height:12px;background:var(--green);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;mix-blend-mode:difference; }
+  .cursor-trail { width:40px;height:40px;border:1px solid var(--green);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transition:all 0.3s ease;opacity:0.5; }
+
+  /* NAV */
+  nav { position:fixed;top:36px;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:linear-gradient(to bottom,rgba(10,10,10,0.97),transparent);backdrop-filter:blur(8px); }
+  .logo { font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:var(--white);letter-spacing:-0.02em; }
+  .logo span { color:var(--green); }
+  .nav-links { display:flex;gap:2rem;list-style:none; }
+  .nav-links a { color:rgba(245,242,236,0.6);text-decoration:none;font-size:0.85rem;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;transition:color 0.2s; }
+  .nav-links a:hover { color:var(--white); }
+  .nav-cta { background:var(--green)!important;color:var(--black)!important;padding:0.55rem 1.3rem;border-radius:2rem;font-weight:600!important; }
+  .nav-cta:hover { background:var(--green-light)!important; }
+
+  /* HERO */
+  .hero { min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:9rem 4rem 4rem;position:relative;overflow:hidden; }
+  .hero-bg { position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 70% 50%,rgba(34,197,94,0.08) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 20% 80%,rgba(134,239,172,0.04) 0%,transparent 50%);pointer-events:none; }
+  .hero-grid { position:absolute;inset:0;background-image:linear-gradient(rgba(34,197,94,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(34,197,94,0.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none; }
+  .hero-left { position:relative;z-index:2; }
+  .hero-badge { display:inline-flex;align-items:center;gap:0.5rem;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);padding:0.4rem 1rem;border-radius:2rem;font-size:0.8rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);margin-bottom:2rem;opacity:0;animation:fadeUp 0.8s ease 0.2s forwards; }
+  .hero-badge::before { content:'';width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.8);} }
+  .hero-headline { font-family:'Playfair Display',serif;font-size:clamp(3rem,5vw,4.5rem);font-weight:900;line-height:1.05;letter-spacing:-0.03em;margin-bottom:1.5rem;opacity:0;animation:fadeUp 0.8s ease 0.4s forwards; }
+  .hero-headline em { font-style:normal;color:var(--green);position:relative; }
+  .hero-headline em::after { content:'';position:absolute;bottom:4px;left:0;right:0;height:3px;background:var(--gold);transform:scaleX(0);transform-origin:left;animation:underlineReveal 0.6s ease 1.2s forwards; }
+  @keyframes underlineReveal{to{transform:scaleX(1);}}
+  .hero-sub { font-size:1.1rem;font-weight:300;color:rgba(245,242,236,0.65);line-height:1.7;max-width:480px;margin-bottom:2.5rem;opacity:0;animation:fadeUp 0.8s ease 0.6s forwards; }
+  .hero-actions { display:flex;gap:1rem;align-items:center;opacity:0;animation:fadeUp 0.8s ease 0.8s forwards; }
+  .btn-primary { background:var(--green);color:var(--black);padding:0.9rem 2rem;border:none;border-radius:3rem;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;cursor:none;transition:transform 0.2s,box-shadow 0.2s;text-decoration:none;display:inline-block; }
+  .btn-primary:hover { transform:translateY(-2px);box-shadow:0 12px 40px rgba(34,197,94,0.35); }
+  .btn-ghost { color:var(--white);padding:0.9rem 2rem;border:1px solid rgba(245,242,236,0.2);border-radius:3rem;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:500;cursor:none;transition:border-color 0.2s,background 0.2s;text-decoration:none;display:inline-block; }
+  .btn-ghost:hover { border-color:var(--white);background:rgba(255,255,255,0.05); }
+  .hero-stats { display:flex;gap:2.5rem;margin-top:3.5rem;opacity:0;animation:fadeUp 0.8s ease 1s forwards; }
+  .stat-num { font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--white); }
+  .stat-num span { color:var(--green); }
+  .stat-label { font-size:0.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:0.2rem; }
+  .hero-right { position:relative;z-index:2;display:flex;align-items:center;justify-content:center;height:500px; }
+  .mentor-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:1.2rem 1.5rem;position:absolute;backdrop-filter:blur(10px); }
+  .mentor-card:nth-child(1){top:20px;right:80px;animation:floatIn 0.8s ease 1.2s both,floatY 4s ease-in-out 2s infinite;}
+  .mentor-card:nth-child(2){top:160px;left:20px;animation:floatIn 0.8s ease 1.5s both,floatY 5s ease-in-out 2.5s infinite;}
+  .mentor-card:nth-child(3){bottom:80px;right:40px;animation:floatIn 0.8s ease 1.8s both,floatY 6s ease-in-out 3s infinite;}
+  .mentor-card:nth-child(4){bottom:160px;left:60px;animation:floatIn 0.8s ease 2.1s both,floatY 4.5s ease-in-out 3.5s infinite;}
+  @keyframes floatIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes floatY{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+  .card-tag { font-size:0.7rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);margin-bottom:0.4rem; }
+  .card-name { font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700; }
+  .card-detail { font-size:0.8rem;color:rgba(245,242,236,0.5);margin-top:0.2rem; }
+  .card-badge { display:inline-block;margin-top:0.6rem;background:rgba(134,239,172,0.15);color:var(--gold);border:1px solid rgba(134,239,172,0.3);padding:0.2rem 0.7rem;border-radius:2rem;font-size:0.72rem;font-weight:600; }
+
+  /* TICKER */
+  .ticker { background:var(--green);padding:0.7rem 0;overflow:hidden;white-space:nowrap; }
+  .ticker-inner { display:inline-flex;animation:ticker 25s linear infinite; }
+  .ticker-item { color:var(--black);font-weight:700;font-size:0.85rem;letter-spacing:0.1em;text-transform:uppercase;padding:0 2rem; }
+  .ticker-item::after { content:'✦';margin-left:2rem; }
+  @keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+  /* SECTIONS */
+  section { padding:6rem 4rem; }
+  .section-label { font-size:0.75rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--green);margin-bottom:1rem; }
+  .section-title { font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);font-weight:900;line-height:1.1;letter-spacing:-0.02em;max-width:700px;margin-bottom:1.5rem; }
+  .section-desc { font-size:1.05rem;font-weight:300;color:rgba(245,242,236,0.6);line-height:1.7;max-width:600px;margin-bottom:3rem; }
+
+  /* EXAM CENTRE - TAB SYSTEM */
+  .exam-centre { background:rgba(255,255,255,0.015);border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06); }
+  .exam-tabs { display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:2.5rem; }
+  .exam-tab { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:2rem;padding:0.55rem 1.2rem;font-size:0.85rem;font-weight:500;color:rgba(245,242,236,0.55);cursor:pointer;transition:all 0.2s;white-space:nowrap; }
+  .exam-tab:hover { border-color:rgba(34,197,94,0.3);color:var(--white); }
+  .exam-tab.active { background:var(--green);border-color:var(--green);color:var(--black);font-weight:700; }
+  .exam-panel { display:none; }
+  .exam-panel.active { display:block; }
+
+  /* Gov Jobs sub tabs */
+  .sub-tabs { display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:1.5rem; }
+  .sub-tab { background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:1.5rem;padding:0.4rem 1rem;font-size:0.8rem;font-weight:500;color:rgba(245,242,236,0.5);cursor:pointer;transition:all 0.2s; }
+  .sub-tab:hover { color:var(--white);border-color:rgba(34,197,94,0.25); }
+  .sub-tab.active { background:rgba(34,197,94,0.12);border-color:rgba(34,197,94,0.35);color:var(--green);font-weight:600; }
+  .sub-panel { display:none; }
+  .sub-panel.active { display:block; }
+
+  /* MENTOR GRID */
+  .mentor-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem; }
+  .mentor-profile { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:2rem;transition:border-color 0.3s,transform 0.3s;cursor:default; }
+  .mentor-profile:hover { border-color:rgba(34,197,94,0.4);transform:translateY(-4px); }
+  .mentor-avatar { width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--gold));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--black);margin-bottom:1rem; }
+  .mentor-name { font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;margin-bottom:0.2rem; }
+  .mentor-cred { font-size:0.8rem;color:var(--green);font-weight:600;margin-bottom:0.5rem; }
+  .mentor-bio { font-size:0.88rem;color:rgba(245,242,236,0.55);line-height:1.6; }
+  .mentor-tags { display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1rem; }
+  .mentor-tag { background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);padding:0.25rem 0.7rem;border-radius:2rem;font-size:0.72rem;color:rgba(245,242,236,0.7); }
+  .mentor-tag.green { background:rgba(34,197,94,0.12);border-color:rgba(34,197,94,0.25);color:var(--gold); }
+
+  /* EXAM INFO BOX */
+  .exam-info { background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);border-radius:14px;padding:1.5rem 2rem;margin-bottom:2rem; }
+  .exam-info h3 { font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:0.6rem;color:var(--white); }
+  .exam-info p { font-size:0.92rem;color:rgba(245,242,236,0.6);line-height:1.7; }
+
+  /* 4-FOLD METHOD */
+  .fourfold { background:var(--black); }
+  .fourfold-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem; }
+  .fold-card { background:rgba(255,255,255,0.03);border:1px solid rgba(34,197,94,0.12);border-radius:16px;padding:1.8rem 1.5rem;position:relative;overflow:hidden; }
+  .fold-card::before { content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--green); }
+  .fold-num { font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;color:rgba(34,197,94,0.08);line-height:1;margin-bottom:0.5rem; }
+  .fold-icon { font-size:1.8rem;margin-bottom:0.8rem; }
+  .fold-title { font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin-bottom:0.6rem; }
+  .fold-desc { font-size:0.88rem;color:rgba(245,242,236,0.55);line-height:1.6; }
+
+  /* AUDIENCE */
+  .audiences { background:rgba(255,255,255,0.02);border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08); }
+  .audience-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-top:1rem; }
+  .audience-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:2rem;transition:border-color 0.3s,background 0.3s,transform 0.3s;cursor:default;position:relative;overflow:hidden; }
+  .audience-card::before { content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--green);transform:scaleX(0);transform-origin:left;transition:transform 0.3s; }
+  .audience-card:hover::before { transform:scaleX(1); }
+  .audience-card:hover { border-color:rgba(34,197,94,0.3);background:rgba(34,197,94,0.05);transform:translateY(-4px); }
+  .audience-icon { font-size:2.2rem;margin-bottom:1rem; }
+  .audience-exam { font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;margin-bottom:0.3rem; }
+  .audience-sub { font-size:0.85rem;color:var(--muted); }
+
+  /* HOW IT WORKS */
+  .how-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:2rem; }
+  .how-card { position:relative;padding:2.5rem;border-radius:20px;border:1px solid rgba(255,255,255,0.08);transition:transform 0.3s;overflow:hidden; }
+  .how-card:hover { transform:translateY(-6px); }
+  .how-card:nth-child(1){background:rgba(34,197,94,0.08);border-color:rgba(34,197,94,0.2);}
+  .how-card:nth-child(2){background:rgba(134,239,172,0.06);border-color:rgba(134,239,172,0.2);}
+  .how-card:nth-child(3){background:rgba(255,255,255,0.04);}
+  .how-num { font-family:'Playfair Display',serif;font-size:5rem;font-weight:900;color:rgba(255,255,255,0.04);position:absolute;top:1rem;right:1.5rem;line-height:1; }
+  .how-icon { font-size:2rem;margin-bottom:1.2rem; }
+  .how-title { font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;margin-bottom:0.8rem; }
+  .how-desc { font-size:0.95rem;color:rgba(245,242,236,0.6);line-height:1.6; }
+
+  /* PRICING */
+  .pricing-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;max-width:1000px;margin:0 auto; }
+  .pricing-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:2.5rem;position:relative;transition:transform 0.3s; }
+  .pricing-card:hover { transform:translateY(-6px); }
+  .pricing-card.featured { background:var(--green);border-color:var(--green);color:var(--black); }
+  .pricing-label { font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem;opacity:0.7; }
+  .pricing-name { font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;margin-bottom:0.5rem; }
+  .pricing-price { font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:900;margin-bottom:0.2rem; }
+  .pricing-price sup { font-size:1.2rem; }
+  .pricing-duration { font-size:0.8rem;font-weight:600;margin-bottom:0.2rem;color:var(--gold); }
+  .pricing-card.featured .pricing-duration { color:rgba(0,0,0,0.7); }
+  .pricing-period { font-size:0.85rem;opacity:0.6;margin-bottom:2rem; }
+  .pricing-features { list-style:none;margin-bottom:2rem; }
+  .pricing-features li { padding:0.5rem 0;font-size:0.9rem;opacity:0.8;display:flex;align-items:center;gap:0.5rem;border-bottom:1px solid rgba(0,0,0,0.08); }
+  .pricing-card:not(.featured) .pricing-features li { border-bottom-color:rgba(255,255,255,0.06); }
+  .pricing-features li::before { content:'✓';font-weight:700;color:var(--green); }
+  .pricing-card.featured .pricing-features li::before { color:var(--black); }
+  .pricing-btn { width:100%;padding:0.9rem;border-radius:3rem;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;transition:transform 0.2s,box-shadow 0.2s; }
+  .pricing-card.featured .pricing-btn { background:var(--black);color:var(--white); }
+  .pricing-card:not(.featured) .pricing-btn { background:var(--green);color:var(--black); }
+  .pricing-btn:hover { transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.3); }
+  .popular-badge { position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--black);color:var(--green);font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:0.3rem 1rem;border-radius:2rem;border:1px solid var(--green); }
+  .pricing-zoho-note { font-size:0.78rem;text-align:center;margin-top:0.8rem;opacity:0.5; }
+
+  /* TESTIMONIALS */
+  .testimonials { background:rgba(255,255,255,0.015); }
+  .testimonial-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem; }
+  .testimonial-card { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:2rem; }
+  .stars { color:var(--gold);font-size:0.9rem;margin-bottom:1rem;letter-spacing:0.1em; }
+  .testimonial-text { font-size:0.95rem;line-height:1.7;color:rgba(245,242,236,0.8);margin-bottom:1.5rem;font-style:italic; }
+  .testimonial-author { display:flex;align-items:center;gap:0.8rem; }
+  .author-avatar { width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,rgba(34,197,94,0.3),rgba(134,239,172,0.3));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:1rem;color:var(--white); }
+  .author-name { font-weight:600;font-size:0.9rem; }
+  .author-detail { font-size:0.78rem;color:var(--muted); }
+
+  /* FINAL CTA */
+  .final-cta { text-align:center;background:linear-gradient(135deg,rgba(34,197,94,0.15),rgba(134,239,172,0.08));border-top:1px solid rgba(34,197,94,0.2);border-bottom:1px solid rgba(34,197,94,0.2); }
+  .final-cta .section-title { margin:0 auto 1rem; }
+  .final-cta .section-desc { margin:0 auto 2.5rem; }
+  .cta-actions { display:flex;justify-content:center;gap:1rem; }
+
+  /* FOOTER */
+  footer { padding:3rem 4rem;border-top:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between; }
+  .footer-logo { font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900; }
+  .footer-logo span { color:var(--green); }
+  .footer-tagline { font-size:0.8rem;color:var(--muted);margin-top:0.3rem; }
+  .footer-links { display:flex;gap:2rem; }
+  .footer-links a { color:var(--muted);text-decoration:none;font-size:0.85rem;transition:color 0.2s; }
+  .footer-links a:hover { color:var(--white); }
+  .footer-copy { font-size:0.78rem;color:var(--muted); }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);} }
+  .reveal { opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease; }
+  .reveal.visible { opacity:1;transform:translateY(0); }
+
+  /* EMPTY STATE */
+  .coming-soon { text-align:center;padding:3rem;color:rgba(245,242,236,0.3);font-size:0.95rem; }
+  .coming-soon span { display:block;font-size:2rem;margin-bottom:0.8rem; }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="cursorTrail"></div>
+
+<!-- CONSTRUCTION BANNER -->
+<div class="construction-bar">
+  🚧 Website Under Construction — Some features may not be clickable yet. Full launch coming soon! <span>Thank you for your patience.</span>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">True<span>Prep</span></div>
+  <ul class="nav-links">
+    <li><a href="#exam-centre">Exam Centre</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#mentors-quality">Our Mentors</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#pricing" class="nav-cta">Join Now</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-left">
+    <div class="hero-badge">India's Mentorship Platform for Exam Aspirants</div>
+    <h1 class="hero-headline">Learn From Those<br/>Who've <em>Actually</em><br/>Cracked It</h1>
+    <p class="hero-sub">Connect with IIT alumni, IIM graduates & UPSC toppers. Real 1-on-1 mentorship, peer communities, and live sessions — not just lectures.</p>
+    <div class="hero-actions">
+      <a href="#pricing" class="btn-primary">Start Your Journey →</a>
+      <a href="#exam-centre" class="btn-ghost">Explore Exams</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-num">5<span>+</span></div><div class="stat-label">Verified Mentors</div></div>
+      <div><div class="stat-num">4<span>+</span></div><div class="stat-label">Exam Categories</div></div>
+      <div><div class="stat-num">₹99<span></span></div><div class="stat-label">Starting Price</div></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="mentor-card"><div class="card-tag">Jharkhand Govt</div><div class="card-name">Qamar Tauhid</div><div class="card-detail">BSO · Cleared UPSC, BPSC, JPSC</div><div class="card-badge">Gov Jobs Mentor</div></div>
+    <div class="mentor-card"><div class="card-tag">Jharkhand Govt</div><div class="card-name">Sumit Singh</div><div class="card-detail">Circle Inspector · JPSC Cleared</div><div class="card-badge">Gov Jobs Mentor</div></div>
+    <div class="mentor-card"><div class="card-tag">CLAT Expert</div><div class="card-name">Adv. Abhishek Mishra</div><div class="card-detail">SC Lawyer · Legal Influencer</div><div class="card-badge">CLAT Mentor</div></div>
+    <div class="mentor-card"><div class="card-tag">NEET</div><div class="card-name">Pushanjay Mishra</div><div class="card-detail">600+ in NEET · Medicine Agency</div><div class="card-badge">NEET Mentor</div></div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item">JEE Mentorship</span><span class="ticker-item">CAT Prep</span><span class="ticker-item">UPSC Guidance</span><span class="ticker-item">NEET Strategy</span><span class="ticker-item">JSSC Prep</span><span class="ticker-item">BPSC Mentors</span><span class="ticker-item">CLAT Coaching</span><span class="ticker-item">JPSC Guidance</span><span class="ticker-item">Gov Jobs</span><span class="ticker-item">1-on-1 Sessions</span><span class="ticker-item">Live Classes</span><span class="ticker-item">Peer Community</span>
+    <span class="ticker-item">JEE Mentorship</span><span class="ticker-item">CAT Prep</span><span class="ticker-item">UPSC Guidance</span><span class="ticker-item">NEET Strategy</span><span class="ticker-item">JSSC Prep</span><span class="ticker-item">BPSC Mentors</span><span class="ticker-item">CLAT Coaching</span><span class="ticker-item">JPSC Guidance</span><span class="ticker-item">Gov Jobs</span><span class="ticker-item">1-on-1 Sessions</span><span class="ticker-item">Live Classes</span><span class="ticker-item">Peer Community</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     EXAM CENTRE — TAB SYSTEM
+══════════════════════════════════════ -->
+<section class="exam-centre" id="exam-centre">
+  <div class="section-label">Exam Centre</div>
+  <div class="section-title">Find Your Exam. Find Your Mentor.</div>
+  <div class="section-desc">Select your exam category below to see mentors, details, and session options tailored specifically for you.</div>
+
+  <!-- MAIN TABS -->
+  <div class="exam-tabs">
+    <div class="exam-tab active" onclick="showTab('gov-jobs')">🏛️ Gov Jobs</div>
+    <div class="exam-tab" onclick="showTab('upsc-pcs')">📜 UPSC / PCS</div>
+    <div class="exam-tab" onclick="showTab('clat')">⚖️ CLAT</div>
+    <div class="exam-tab" onclick="showTab('neet')">🩺 NEET</div>
+    <div class="exam-tab" onclick="showTab('jee')">⚙️ JEE</div>
+    <div class="exam-tab" onclick="showTab('cat')">📊 CAT / MBA</div>
+    <div class="exam-tab" onclick="showTab('gate')">💻 GATE</div>
+  </div>
+
+  <!-- ── GOV JOBS ── -->
+  <div class="exam-panel active" id="panel-gov-jobs">
+    <div class="exam-info">
+      <h3>🏛️ Government Jobs — Jharkhand & Beyond</h3>
+      <p>Get mentored by verified Jharkhand government employees who've cleared multiple state and central competitive exams. Real experience. Real strategy. No generic advice.</p>
+    </div>
+    <div class="sub-tabs">
+      <div class="sub-tab active" onclick="showSub('jssc')">JSSC</div>
+      <div class="sub-tab" onclick="showSub('jpsc')">JPSC</div>
+      <div class="sub-tab" onclick="showSub('bpsc-gov')">BPSC</div>
+      <div class="sub-tab" onclick="showSub('other-gov')">Other State PSC</div>
+    </div>
+
+    <div class="sub-panel active" id="sub-jssc">
+      <div class="mentor-grid">
+        <div class="mentor-profile reveal">
+          <div class="mentor-avatar">QT</div>
+          <div class="mentor-name">Qamar Tauhid</div>
+          <div class="mentor-cred">Block Supply Officer · Jharkhand Govt</div>
+          <div class="mentor-bio">A BSO under the Jharkhand Government, Qamar has cleared multiple prestigious exams including UPSC, BPSC, JPSC, and WBPCS. His strategy-first approach has helped dozens of aspirants crack state-level exams.</div>
+          <div class="mentor-tags">
+            <span class="mentor-tag green">JSSC</span><span class="mentor-tag green">JPSC</span><span class="mentor-tag">BPSC</span><span class="mentor-tag">UPSC</span><span class="mentor-tag">WBPCS</span>
+          </div>
+        </div>
+        <div class="mentor-profile reveal">
+          <div class="mentor-avatar">SS</div>
+          <div class="mentor-name">Sumit Singh</div>
+          <div class="mentor-cred">Circle Inspector · Jharkhand Govt</div>
+          <div class="mentor-bio">Sumit is a serving Circle Inspector under the Jharkhand Government. He cleared JPSC and has deep expertise in state-level exam patterns, current affairs strategy, and interview preparation.</div>
+          <div class="mentor-tags">
+            <span class="mentor-tag green">JSSC</span><span class="mentor-tag green">JPSC</span><span class="mentor-tag">Interview Prep</span>
+          </div>
+        </div>
+        <div class="mentor-profile reveal">
+          <div class="mentor-avatar">HK</div>
+          <div class="mentor-name">Hemant Kumar Singh</div>
+          <div class="mentor-cred">LEO · Jharkhand Govt</div>
+          <div class="mentor-bio">Hemant is a Labour Enforcement Officer in Jharkhand, having cleared competitive state exams. He specialises in guiding aspirants through JSSC exam pattern, syllabus planning, and time management.</div>
+          <div class="mentor-tags">
+            <span class="mentor-tag green">JSSC</span><span class="mentor-tag">Syllabus Strategy</span><span class="mentor-tag">Time Management</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-panel" id="sub-jpsc">
+      <div class="mentor-grid">
+        <div class="mentor-profile reveal">
+          <div class="mentor-avatar">QT</div>
+          <div class="mentor-name">Qamar Tauhid</div>
+          <div class="mentor-cred">BSO · Jharkhand Govt</div>
+          <div class="mentor-bio">Cleared JPSC along with UPSC, BPSC, and WBPCS. Qamar brings a multi-exam perspective that helps aspirants understand what separates JPSC from other PCS exams and how to ace it.</div>
+          <div class="mentor-tags"><span class="mentor-tag green">JPSC</span><span class="mentor-tag">Answer Writing</span><span class="mentor-tag">GS Strategy</span></div>
+        </div>
+        <div class="mentor-profile reveal">
+          <div class="mentor-avatar">SS</div>
+          <div class="mentor-name">Sumit Singh</div>
+          <div class="mentor-cred">Circle Inspector · Jharkhand Govt</div>
+          <div class="mentor-bio">Cleared JPSC and serving as CI in Jharkhand. Sumit has a strong command of Jharkhand-specific GK, state polity, and the interview process for JPSC.</div>
+          <div class="mentor-tags"><span class="mentor-tag green">JPSC</span><span class="mentor-tag">Jharkhand GK</span><span class="mentor-tag">Interview</span></div>
+        </div>
+        <div class="mentor-profile reveal">
+          <div class="mentor-avatar">HK</div>
+          <div class="mentor-name">Hemant Kumar Singh</div>
+          <div class="mentor-cred">LEO · Jharkhand Govt</div>
+          <div class="mentor-bio">A Jharkhand government officer who has navigated the state exam ecosystem closely. Hemant mentors on JPSC syllabus, optional selection, and preparation roadmaps.</div>
+          <div class="mentor-tags"><span class="mentor-tag green">JPSC</span><span class="mentor-tag">Optional Strategy</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-panel" id="sub-bpsc-gov">
+      <div class="mentor-grid">
+        <div class="mentor-profile reveal">
+          <div class="mentor-avatar">QT</div>
+          <div class="mentor-name">Qamar Tauhid</div>
+          <div class="mentor-cred">BSO · Jharkhand Govt · BPSC Cleared</div>
+          <div class="mentor-bio">One of the few mentors who has cleared both BPSC and JPSC. Qamar brings a comparative understanding of Bihar and Jharkhand PCS exams, giving aspirants a significant strategic edge.</div>
+          <div class="mentor-tags"><span class="mentor-tag green">BPSC</span><span class="mentor-tag">Prelims Strategy</span><span class="mentor-tag">Mains Writing</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-panel" id="sub-other-gov">
+      <div class="coming-soon"><span>📋</span>More state PSC mentors being onboarded soon. Check back shortly!</div>
+    </div>
+  </div>
+
+  <!-- ── UPSC / PCS ── -->
+  <div class="exam-panel" id="panel-upsc-pcs">
+    <div class="exam-info">
+      <h3>📜 UPSC & State PCS</h3>
+      <p>Civil services is one of the toughest journeys in India. Our mentors have walked this path themselves — from prelims strategy to mains answer writing to personality test preparation.</p>
+    </div>
+    <div class="sub-tabs">
+      <div class="sub-tab active" onclick="showSubUpsc('upsc-cse')">UPSC CSE</div>
+      <div class="sub-tab" onclick="showSubUpsc('bpsc-u')">BPSC</div>
+      <div class="sub-tab" onclick="showSubUpsc('jpsc-u')">JPSC</div>
+      <div class="sub-tab" onclick="showSubUpsc('wbpcs-u')">WBPCS</div>
+      <div class="sub-tab" onclick="showSubUpsc('other-pcs')">Other PCS</div>
+    </div>
+
+    <div class="sub-panel active" id="sub-upsc-cse">
+      <div class="mentor-grid">
+        <div class="mentor-profile reveal">
+          <div class="mentor-avatar">QT</div>
+          <div class="mentor-name">Qamar Tauhid</div>
+          <div class="mentor-cred">BSO · Jharkhand Govt · UPSC Mains Cleared</div>
+          <div class="mentor-bio">Qamar cleared UPSC Mains and brings first-hand experience of the civil services examination process. He guides aspirants on GS preparation, optional selection, and answer writing quality.</div>
+          <div class="mentor-tags"><span class="mentor-tag green">UPSC CSE</span><span class="mentor-tag">GS Papers</span><span class="mentor-tag">Answer Writing</span><span class="mentor-tag">Optional Strategy</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="sub-panel" id="sub-bpsc-u">
+      <div class="mentor-grid">
+        <div class="mentor-profile reveal">
+          <div class="mentor-avatar">QT</div>
+          <div class="mentor-name">Qamar Tauhid</div>
+          <div class="mentor-cred">BSO · BPSC Cleared</div>
+          <div class="mentor-bio">Cleared BPSC and currently serving as a government officer. Qamar helps BPSC aspirants with Bihar-specific GK, syllabus coverage, and answer writing techniques for mains.</div>
+          <div class="mentor-tags"><span class="mentor-tag green">BPSC</span><span class="mentor-tag">Bihar GK</span><span class="mentor-tag">Mains Strategy</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="sub-panel" id="sub-jpsc-u">
+      <div class="mentor-grid">
+        <div class="mentor-profile reveal">
+          <div class="mentor-avatar">QT</div><div class="mentor-name">Qamar Tauhid</div><div class="mentor-cred">BSO · JPSC Cleared</div>
+          <div class="mentor-bio">Cleared JPSC. Mentors on Jharkhand-specific topics, GS strategy, and the complete JPSC roadmap from prelims to interview.</div>
+          <div class="mentor-tags"><span class="mentor-tag green">JPSC</span><span class="mentor-tag">Prelims</span><span class="mentor-tag">Mains</span></div>
+        </div>
+        <div class="mentor-profile reveal">
+          <div class="mentor-avatar">SS</div><div class="mentor-name">Sumit Singh</div><div class="mentor-cred">Circle Inspector · JPSC Cleared</div>
+          <div class="mentor-bio">Cleared JPSC and serving as CI. Sumit's practical experience as a government officer adds real insight to his mentorship on JPSC preparation.</div>
+          <div class="mentor-tags"><span class="mentor-tag green">JPSC</span><span class="mentor-tag">Interview Prep</span></div>
+        </div>
+        <div class="mentor-profile reveal">
+          <div class="mentor-avatar">HK</div><div class="mentor-name">Hemant Kumar Singh</div><div class="mentor-cred">LEO · Jharkhand Govt</div>
+          <div class="mentor-bio">Jharkhand government officer mentoring aspirants on JPSC syllabus planning, optional paper selection, and Jharkhand-specific preparation strategy.</div>
+          <div class="mentor-tags"><span class="mentor-tag green">JPSC</span><span class="mentor-tag">Syllabus Planning</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="sub-panel" id="sub-wbpcs-u">
+      <div class="mentor-grid">
+        <div class="mentor-profile reveal">
+          <div class="mentor-avatar">QT</div><div class="mentor-name">Qamar Tauhid</div><div class="mentor-cred">BSO · WBPCS Cleared</div>
+          <div class="mentor-bio">One of very few mentors who has cleared WBPCS in addition to Jharkhand and Bihar exams. Qamar guides Bengal PCS aspirants on the unique WBPCS pattern and preparation approach.</div>
+          <div class="mentor-tags"><span class="mentor-tag green">WBPCS</span><span class="mentor-tag">Bengali GK</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="sub-panel" id="sub-other-pcs">
+      <div class="coming-soon"><span>📋</span>More PCS mentors being onboarded. Stay tuned!</div>
+    </div>
+  </div>
+
+  <!-- ── CLAT ── -->
+  <div class="exam-panel" id="panel-clat">
+    <div class="exam-info">
+      <h3>⚖️ CLAT — Common Law Admission Test</h3>
+      <p>Get guidance from a practicing Supreme Court advocate who understands both the exam and the legal career path that follows. Real legal mind. Real mentorship.</p>
+    </div>
+    <div class="mentor-grid">
+      <div class="mentor-profile reveal">
+        <div class="mentor-avatar">AM</div>
+        <div class="mentor-name">Adv. Abhishek Mishra</div>
+        <div class="mentor-cred">Supreme Court Lawyer · Social Media Legal Influencer</div>
+        <div class="mentor-bio">Advocate Abhishek Mishra is a practising lawyer at the Supreme Court of India and a well-known legal influencer on social media. He mentors CLAT aspirants on legal reasoning, GK for law, and the complete NLU admission journey — with real courtroom perspective that no coaching can give.</div>
+        <div class="mentor-tags">
+          <span class="mentor-tag green">CLAT</span><span class="mentor-tag green">Legal Reasoning</span><span class="mentor-tag">NLU Strategy</span><span class="mentor-tag">GK for Law</span><span class="mentor-tag">Career Guidance</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── NEET ── -->
+  <div class="exam-panel" id="panel-neet">
+    <div class="exam-info">
+      <h3>🩺 NEET — National Eligibility cum Entrance Test</h3>
+      <p>Mentored by someone who has scored 600+ in NEET and understands the medical field from the inside. From exam strategy to career planning after NEET.</p>
+    </div>
+    <div class="mentor-grid">
+      <div class="mentor-profile reveal">
+        <div class="mentor-avatar">PM</div>
+        <div class="mentor-name">Pushanjay Mishra</div>
+        <div class="mentor-cred">NEET 600+ Scorer · Medicine Entrepreneur</div>
+        <div class="mentor-bio">Pushanjay scored 600+ in NEET and is currently running his own medicine agency — making him uniquely positioned to guide aspirants not just on how to crack the exam, but what life looks like in the medical field beyond it. His mentorship covers Biology, Chemistry strategy, time management, and post-NEET career clarity.</div>
+        <div class="mentor-tags">
+          <span class="mentor-tag green">NEET</span><span class="mentor-tag green">Biology</span><span class="mentor-tag">Chemistry</span><span class="mentor-tag">Score 600+</span><span class="mentor-tag">Career Clarity</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── JEE ── -->
+  <div class="exam-panel" id="panel-jee">
+    <div class="exam-info"><h3>⚙️ JEE — Joint Entrance Examination</h3><p>Mentors for JEE Mains and Advanced are being onboarded. We are verifying IIT alumni for this category.</p></div>
+    <div class="coming-soon"><span>⚙️</span>JEE mentors coming soon. Follow @true.prep for updates!</div>
+  </div>
+
+  <!-- ── CAT ── -->
+  <div class="exam-panel" id="panel-cat">
+    <div class="exam-info"><h3>📊 CAT / MBA</h3><p>IIM graduates and 99%ilers being onboarded for CAT mentorship. Stay tuned.</p></div>
+    <div class="coming-soon"><span>📊</span>CAT mentors coming soon. Follow @true.prep for updates!</div>
+  </div>
+
+  <!-- ── GATE ── -->
+  <div class="exam-panel" id="panel-gate">
+    <div class="exam-info"><h3>💻 GATE</h3><p>GATE toppers and IIT/IISc M.Tech grads being verified for this category.</p></div>
+    <div class="coming-soon"><span>💻</span>GATE mentors coming soon. Follow @true.prep for updates!</div>
+  </div>
+
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-label">The TruePrep Way</div>
+  <div class="section-title">Three Ways We Accelerate Your Prep</div>
+  <div class="section-desc">No generic content. No faceless courses. Just real people, real strategies, and real community.</div>
+  <div class="how-grid">
+    <div class="how-card reveal"><div class="how-num">01</div><div class="how-icon">🎯</div><div class="how-title">1-on-1 Mentorship</div><div class="how-desc">Book private sessions with verified mentors. Get personalised strategy, roadmaps, and honest feedback — no cookie-cutter advice.</div></div>
+    <div class="how-card reveal"><div class="how-num">02</div><div class="how-icon">👥</div><div class="how-title">Peer Communities</div><div class="how-desc">Join exam-specific communities of serious aspirants. Study groups, daily challenges, and accountability partners who understand your journey.</div></div>
+    <div class="how-card reveal"><div class="how-num">03</div><div class="how-icon">📡</div><div class="how-title">Live Sessions</div><div class="how-desc">Attend live strategy sessions and AMA with toppers. Interactive, not recorded. Real answers to real doubts.</div></div>
+  </div>
+</section>
+
+<!-- 4-FOLD MENTOR QUALITY -->
+<section class="fourfold" id="mentors-quality">
+  <div class="section-label">Our Quality Promise</div>
+  <div class="section-title">How We Choose Our Mentors — The 4-Fold Method</div>
+  <div class="section-desc">We don't let just anyone mentor on TruePrep. Every mentor passes our rigorous 4-step verification before they can guide a single aspirant.</div>
+  <div class="fourfold-grid">
+    <div class="fold-card reveal">
+      <div class="fold-num">01</div>
+      <div class="fold-icon">📄</div>
+      <div class="fold-title">Document Verification</div>
+      <div class="fold-desc">Every mentor submits official proof — rank letters, scorecards, degree certificates, and government IDs. No self-certification. No exceptions.</div>
+    </div>
+    <div class="fold-card reveal">
+      <div class="fold-num">02</div>
+      <div class="fold-icon">🎙️</div>
+      <div class="fold-title">Expert Interview</div>
+      <div class="fold-desc">Our team interviews every mentor personally. We assess their subject knowledge, communication quality, and ability to simplify concepts for aspirants.</div>
+    </div>
+    <div class="fold-card reveal">
+      <div class="fold-num">03</div>
+      <div class="fold-icon">🧪</div>
+      <div class="fold-title">Trial Session Review</div>
+      <div class="fold-desc">Mentors conduct a mock session which is reviewed by our quality team. We check practical guidance quality, empathy, and structure before approving them.</div>
+    </div>
+    <div class="fold-card reveal">
+      <div class="fold-num">04</div>
+      <div class="fold-icon">⭐</div>
+      <div class="fold-title">Ongoing Rating Monitor</div>
+      <div class="fold-desc">After onboarding, every mentor is continuously rated by aspirants. Mentors falling below 4.0 are reviewed and removed. Quality is not a one-time check.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-label">Simple Pricing</div>
+  <div class="section-title" style="text-align:center;margin:0 auto 1rem;">Invest in Your Rank</div>
+  <div class="section-desc" style="text-align:center;margin:0 auto 3rem;">One subscription. Full access. No hidden fees.</div>
+  <div class="pricing-grid">
+    <div class="pricing-card reveal">
+      <div class="pricing-label">Starter</div>
+      <div class="pricing-name">Explorer</div>
+      <div class="pricing-price"><sup>₹</sup>99</div>
+      <div class="pricing-duration">2 Months Access</div>
+      <div class="pricing-period">Best for trying TruePrep</div>
+      <ul class="pricing-features">
+        <li>Peer community access</li>
+        <li>2 live sessions / month</li>
+        <li>Study group access</li>
+        <li>Resource library</li>
+        <li>No mentor sessions</li>
+      </ul>
+      <button class="pricing-btn" onclick="window.open('ZOHO_LINK_EXPLORER','_blank')">Get Started</button>
+      <div class="pricing-zoho-note">You'll be redirected to our secure form</div>
+    </div>
+    <div class="pricing-card featured reveal">
+      <div class="popular-badge">Most Popular</div>
+      <div class="pricing-label">Best Value</div>
+      <div class="pricing-name">Achiever</div>
+      <div class="pricing-price"><sup>₹</sup>199</div>
+      <div class="pricing-duration">5 Months Access</div>
+      <div class="pricing-period">Best for serious aspirants</div>
+      <ul class="pricing-features">
+        <li>Everything in Explorer</li>
+        <li>1 mentor session / month</li>
+        <li>Unlimited live sessions</li>
+        <li>Personalised roadmap</li>
+        <li>Priority doubt solving</li>
+      </ul>
+      <button class="pricing-btn" onclick="window.open('ZOHO_LINK_ACHIEVER','_blank')">Join Achiever</button>
+      <div class="pricing-zoho-note" style="color:rgba(0,0,0,0.5);">You'll be redirected to our secure form</div>
+    </div>
+    <div class="pricing-card reveal">
+      <div class="pricing-label">Full Access</div>
+      <div class="pricing-name">Topper</div>
+      <div class="pricing-price"><sup>₹</sup>599</div>
+      <div class="pricing-duration">12 Months Access</div>
+      <div class="pricing-period">Best deal · Full year</div>
+      <ul class="pricing-features">
+        <li>Everything in Achiever</li>
+        <li>2 mentor sessions / month</li>
+        <li>Dedicated mentor assigned</li>
+        <li>Mock interview sessions</li>
+        <li>Alumni network access</li>
+      </ul>
+      <button class="pricing-btn" onclick="window.open('ZOHO_LINK_TOPPER','_blank')">Go Topper</button>
+      <div class="pricing-zoho-note">You'll be redirected to our secure form</div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-label">Success Stories</div>
+  <div class="section-title">Aspirants Who Made It</div>
+  <div class="testimonial-grid">
+    <div class="testimonial-card reveal"><div class="stars">★★★★★</div><p class="testimonial-text">"Qamar sir's strategy for JPSC was exactly what I needed. He's actually cleared the exam — that makes all the difference. TruePrep is genuinely different."</p><div class="testimonial-author"><div class="author-avatar">RK</div><div><div class="author-name">Rohit Kumar</div><div class="author-detail">JPSC Aspirant · Ranchi</div></div></div></div>
+    <div class="testimonial-card reveal"><div class="stars">★★★★★</div><p class="testimonial-text">"Adv. Abhishek helped me understand legal reasoning in a way no book could. His real-world courtroom examples made CLAT preparation click for me."</p><div class="testimonial-author"><div class="author-avatar">PS</div><div><div class="author-name">Priya Singh</div><div class="author-detail">CLAT 2024 Aspirant · Delhi</div></div></div></div>
+    <div class="testimonial-card reveal"><div class="stars">★★★★★</div><p class="testimonial-text">"Pushanjay bhai scored 600+ and he explains Biology like a doctor, not like a teacher. My NEET score improved significantly after just 3 sessions."</p><div class="testimonial-author"><div class="author-avatar">AM</div><div><div class="author-name">Ankit Mishra</div><div class="author-detail">NEET Aspirant · Patna</div></div></div></div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="section-label">Ready to Begin?</div>
+  <div class="section-title">Your Rank Is Waiting.<br/>Your Mentor Is Here.</div>
+  <div class="section-desc">Join aspirants getting real guidance from people who've actually cracked the exams.</div>
+  <div class="cta-actions">
+    <a href="#pricing" class="btn-primary">Join TruePrep Today →</a>
+    <a href="#exam-centre" class="btn-ghost">Browse Mentors</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">True<span>Prep</span></div>
+    <div class="footer-tagline">Learn from those who've been there.</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">About</a><a href="#">Become a Mentor</a><a href="#">Blog</a><a href="#">Contact</a><a href="#">Privacy</a>
+  </div>
+  <div class="footer-copy">© 2025 TruePrep. All rights reserved.</div>
+</footer>
+
+<script>
+  // Cursor
+  const cursor=document.getElementById('cursor'),trail=document.getElementById('cursorTrail');
+  let mx=0,my=0,tx=0,ty=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx-6+'px';cursor.style.top=my-6+'px';});
+  function animateTrail(){tx+=(mx-tx)*0.12;ty+=(my-ty)*0.12;trail.style.left=tx-20+'px';trail.style.top=ty-20+'px';requestAnimationFrame(animateTrail);}
+  animateTrail();
+
+  // Scroll reveal
+  const reveals=document.querySelectorAll('.reveal');
+  const obs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80);});},{threshold:0.1});
+  reveals.forEach(r=>obs.observe(r));
+
+  // Main exam tabs
+  function showTab(id){
+    document.querySelectorAll('.exam-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.exam-panel').forEach(p=>p.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('panel-'+id).classList.add('active');
+  }
+
+  // Gov Jobs sub tabs
+  function showSub(id){
+    document.querySelectorAll('#panel-gov-jobs .sub-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('#panel-gov-jobs .sub-panel').forEach(p=>p.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('sub-'+id).classList.add('active');
+  }
+
+  // UPSC sub tabs
+  function showSubUpsc(id){
+    document.querySelectorAll('#panel-upsc-pcs .sub-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('#panel-upsc-pcs .sub-panel').forEach(p=>p.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('sub-'+id).classList.add('active');
+  }
+</script>
+</body>
+</html>
