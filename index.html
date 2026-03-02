@@ -477,11 +477,151 @@ footer{background:var(--bg3);padding:2.2rem 3rem;border-top:1px solid var(--bord
   .verify-step{gap:1rem;}
   .vs-num{width:42px;height:42px;font-size:1rem;}
 }
+/* ===================== PLAN PICKER ===================== */
+.plan-banner{
+  display:flex;gap:0.8rem;flex-wrap:wrap;margin-bottom:2rem;
+}
+.plan-chip{
+  flex:1;min-width:140px;
+  background:var(--bg3);border:2px solid var(--border);
+  border-radius:14px;padding:1rem;cursor:pointer;
+  transition:all 0.2s;text-align:center;
+  font-family:'DM Sans',sans-serif;
+}
+.plan-chip:hover{border-color:var(--blue);background:var(--blue-pale);}
+.plan-chip.selected{border-color:var(--blue);background:var(--blue-pale);}
+.plan-chip.plan-featured{border-color:var(--blue);background:var(--blue);}
+.plan-chip.plan-featured .pc-name,.plan-chip.plan-featured .pc-price,.plan-chip.plan-featured .pc-desc{color:#fff;}
+.plan-chip.plan-featured.selected{background:var(--blue);border-color:var(--blue);}
+.pc-badge{font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:var(--text);color:var(--bg);padding:0.15rem 0.5rem;border-radius:2rem;display:inline-block;margin-bottom:0.4rem;}
+.pc-name{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:0.2rem;}
+.pc-price{font-size:1.4rem;font-weight:700;color:var(--blue);font-family:'Playfair Display',serif;}
+.pc-desc{font-size:0.72rem;color:var(--text-muted);margin-top:0.2rem;}
+.plan-chip.plan-featured .pc-price{color:#fff;}
+
+/* selected plan pill shown in exam picker */
+.selected-plan-pill{
+  display:none;align-items:center;gap:0.6rem;
+  background:var(--blue-pale);border:1.5px solid rgba(37,99,235,0.3);
+  border-radius:2rem;padding:0.4rem 1rem;
+  font-size:0.8rem;font-weight:600;color:var(--blue);
+  margin-bottom:1.2rem;
+}
+.selected-plan-pill.show{display:inline-flex;}
+.spp-change{font-size:0.72rem;font-weight:500;color:var(--text-muted);cursor:pointer;text-decoration:underline;margin-left:0.4rem;}
+
 @media(max-width:480px){
   .fourfold-grid{grid-template-columns:1fr;}
   .story-problem-cards{grid-template-columns:1fr;}
   .hero-actions{flex-direction:column;align-items:flex-start;}
   .btn-primary,.btn-dark,.btn-ghost{width:100%;justify-content:center;}
+  .plan-banner{flex-direction:column;}
+}
+
+/* ===================== CONFIRMATION PAGE ===================== */
+.confirm-page-bg{
+  background:linear-gradient(160deg,var(--bg) 0%,var(--bg2) 100%);
+  min-height:100vh;
+}
+.confirm-hero{
+  background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 50%,#1d4ed8 100%);
+  padding:3rem 2rem 2.5rem;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+[data-theme="dark"] .confirm-hero{background:linear-gradient(135deg,#050a14 0%,#0f1f3d 50%,#1d4ed8 100%);}
+.confirm-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(59,130,246,0.2),transparent);pointer-events:none;}
+.confirm-fire{font-size:3.5rem;display:block;margin-bottom:0.8rem;animation:fireAnim 0.6s ease infinite alternate;}
+@keyframes fireAnim{from{transform:scale(1) rotate(-3deg);}to{transform:scale(1.1) rotate(3deg);}}
+.confirm-headline{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:900;color:#fff;line-height:1.1;margin-bottom:0.8rem;position:relative;z-index:1;}
+.confirm-headline span{color:#60a5fa;}
+.confirm-subline{font-size:0.95rem;color:rgba(255,255,255,0.75);line-height:1.7;max-width:500px;margin:0 auto;position:relative;z-index:1;}
+
+.confirm-mentor-card{
+  background:var(--card);
+  border:2px solid var(--blue);
+  border-radius:20px;
+  padding:1.8rem;
+  margin:2rem auto;
+  max-width:520px;
+  box-shadow:0 8px 40px rgba(37,99,235,0.15);
+  position:relative;
+}
+.confirm-mentor-card::before{
+  content:'YOUR MENTOR';
+  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  background:var(--blue);color:#fff;
+  font-size:0.62rem;font-weight:700;letter-spacing:0.15em;
+  padding:0.25rem 0.9rem;border-radius:2rem;white-space:nowrap;
+}
+.confirm-mentor-top{display:flex;align-items:center;gap:1.1rem;margin-bottom:1.2rem;}
+.confirm-avatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-mid));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:#fff;flex-shrink:0;}
+.confirm-mentor-name{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--text);}
+.confirm-mentor-cred{font-size:0.78rem;color:var(--blue);font-weight:600;margin-top:0.2rem;}
+.confirm-story{font-size:0.88rem;color:var(--text-muted);line-height:1.75;font-style:italic;border-left:3px solid var(--blue);padding-left:1rem;margin-bottom:1.2rem;}
+.confirm-tags{display:flex;flex-wrap:wrap;gap:0.4rem;}
+.confirm-tag{background:var(--blue-pale);border:1px solid rgba(37,99,235,0.2);padding:0.2rem 0.65rem;border-radius:2rem;font-size:0.7rem;color:var(--blue);font-weight:600;}
+
+.confirm-hype-box{
+  max-width:520px;margin:0 auto 2rem;
+  background:linear-gradient(135deg,var(--blue-pale),var(--bg2));
+  border:1.5px solid rgba(37,99,235,0.2);
+  border-radius:16px;padding:1.5rem;
+  text-align:center;
+}
+.confirm-hype-box .hype-q{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:0.5rem;}
+.confirm-hype-box .hype-sub{font-size:0.85rem;color:var(--text-muted);line-height:1.65;}
+
+.confirm-session-details{
+  max-width:520px;margin:0 auto 2rem;
+  background:var(--bg3);border:1.5px solid var(--border);
+  border-radius:14px;padding:1.2rem 1.5rem;
+}
+.confirm-detail-row{display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid var(--border);font-size:0.88rem;}
+.confirm-detail-row:last-child{border-bottom:none;}
+.confirm-detail-label{color:var(--text-muted);font-weight:500;}
+.confirm-detail-value{color:var(--text);font-weight:600;}
+.confirm-detail-price{color:var(--blue);font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;}
+
+.confirm-actions{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:0.8rem;padding-bottom:3rem;}
+.btn-pay{
+  background:linear-gradient(135deg,#16a34a,#15803d);
+  color:#fff;padding:1.1rem 2rem;border:none;border-radius:3rem;
+  font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:700;
+  cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;
+  display:flex;align-items:center;justify-content:center;gap:0.6rem;
+  box-shadow:0 6px 25px rgba(22,163,74,0.3);
+}
+.btn-pay:hover{transform:translateY(-2px);box-shadow:0 12px 35px rgba(22,163,74,0.4);}
+.btn-pay-sub{font-size:0.75rem;opacity:0.85;font-weight:400;}
+.confirm-secure{text-align:center;font-size:0.75rem;color:var(--text-muted);margin-top:0.5rem;}
+
+/* pulse ring on pay button */
+.btn-pay{position:relative;overflow:hidden;}
+.btn-pay::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.1);border-radius:3rem;animation:payPulse 2s ease infinite;}
+@keyframes payPulse{0%,100%{opacity:0;}50%{opacity:1;}}
+
+/* ===================== PAYMENT SUCCESS PAGE ===================== */
+.success-page-inner{max-width:580px;margin:0 auto;padding:3rem 2rem 5rem;text-align:center;}
+.success-blast{font-size:4rem;margin-bottom:1rem;animation:blastIn 0.5s cubic-bezier(0.34,1.56,0.64,1);}
+@keyframes blastIn{from{transform:scale(0) rotate(-20deg);opacity:0;}to{transform:scale(1) rotate(0);opacity:1;}}
+.success-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.5rem);font-weight:900;color:var(--text);margin-bottom:0.6rem;line-height:1.1;}
+.success-title span{color:var(--blue);}
+.success-sub{font-size:0.95rem;color:var(--text-muted);line-height:1.75;margin-bottom:2.5rem;}
+.next-steps{text-align:left;margin-bottom:2.5rem;}
+.next-steps h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:1.2rem;text-align:center;}
+.next-step-item{display:flex;align-items:flex-start;gap:1rem;padding:1rem;background:var(--bg3);border:1.5px solid var(--border);border-radius:12px;margin-bottom:0.8rem;}
+.ns-num{width:32px;height:32px;border-radius:50%;background:var(--blue);color:#fff;font-weight:700;font-size:0.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ns-text{font-size:0.88rem;color:var(--text);line-height:1.6;}
+.ns-text strong{color:var(--text);display:block;margin-bottom:0.2rem;}
+.success-order-box{background:var(--blue-pale);border:1.5px solid rgba(37,99,235,0.2);border-radius:14px;padding:1.2rem;margin-bottom:2rem;}
+.sob-label{font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);margin-bottom:0.3rem;}
+.sob-id{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--text);}
+
+@media(max-width:480px){
+  .confirm-actions{flex-direction:column;}
+  .confirm-mentor-top{flex-direction:column;text-align:center;}
 }
 </style>
 </head>
@@ -626,8 +766,8 @@ footer{background:var(--bg3);padding:2.2rem 3rem;border-top:1px solid var(--bord
       <div class="pricing-duration">2 Months Access</div>
       <div class="pricing-period">Best for trying TruePrep</div>
       <ul class="pricing-features"><li>Peer community access</li><li>2 live sessions/month</li><li>Study group access</li><li>Resource library</li><li>No mentor sessions</li></ul>
-      <button class="pricing-btn" onclick="window.open('ZOHO_LINK_EXPLORER','_blank')">Get Started</button>
-      <div class="pricing-note">Redirects to our secure form</div>
+      <button class="pricing-btn" onclick="selectPlanAndPick('Explorer',99)">Get Started → Pick Exam</button>
+      <div class="pricing-note">Choose your exam after clicking</div>
     </div>
     <div class="pricing-card featured reveal">
       <div class="popular-badge">Most Popular</div>
@@ -637,8 +777,8 @@ footer{background:var(--bg3);padding:2.2rem 3rem;border-top:1px solid var(--bord
       <div class="pricing-duration">5 Months Access</div>
       <div class="pricing-period">Best for regular prep</div>
       <ul class="pricing-features"><li>Everything in Explorer</li><li>1 mentor session/month</li><li>Unlimited live sessions</li><li>Personalised roadmap</li><li>Priority doubt solving</li></ul>
-      <button class="pricing-btn" onclick="window.open('ZOHO_LINK_ACHIEVER','_blank')">Join Achiever</button>
-      <div class="pricing-note">Redirects to our secure form</div>
+      <button class="pricing-btn" onclick="selectPlanAndPick('Achiever',199)">Join Achiever → Pick Exam</button>
+      <div class="pricing-note">Choose your exam after clicking</div>
     </div>
     <div class="pricing-card reveal">
       <div class="pricing-label">Full Access</div>
@@ -647,8 +787,8 @@ footer{background:var(--bg3);padding:2.2rem 3rem;border-top:1px solid var(--bord
       <div class="pricing-duration">12 Months Access</div>
       <div class="pricing-period">Best deal · Full year</div>
       <ul class="pricing-features"><li>Everything in Achiever</li><li>2 mentor sessions/month</li><li>Dedicated mentor assigned</li><li>Mock interview sessions</li><li>Alumni network access</li></ul>
-      <button class="pricing-btn" onclick="window.open('ZOHO_LINK_TOPPER','_blank')">Go Topper</button>
-      <div class="pricing-note">Redirects to our secure form</div>
+      <button class="pricing-btn" onclick="selectPlanAndPick('Topper',599)">Go Topper → Pick Exam</button>
+      <div class="pricing-note">Choose your exam after clicking</div>
     </div>
   </div>
 </section>
@@ -697,6 +837,11 @@ footer{background:var(--bg3);padding:2.2rem 3rem;border-top:1px solid var(--bord
     <button class="op-back" onclick="closePage('examPickerPage')">← Back to TruePrep</button>
     <div class="ep-title">Choose Your Exam</div>
     <div class="ep-sub">Select the exam you're preparing for to see your dedicated mentors.</div>
+    <!-- shows which plan was selected from pricing -->
+    <div class="selected-plan-pill" id="examPickerPlanPill">
+      <span id="examPickerPlanText">✅ Achiever Plan — ₹199 selected</span>
+      <span class="spp-change" onclick="changePlan()">Change plan</span>
+    </div>
 
     <div class="ep-category">
       <div class="ep-cat-label">🏛️ Civil Services & State PCS</div>
@@ -806,6 +951,32 @@ footer{background:var(--bg3);padding:2.2rem 3rem;border-top:1px solid var(--bord
   <div class="op-inner">
     <button class="op-back" onclick="closePage('mentorPage');openPage('examPickerPage')">← Back to Exams</button>
     <div id="mpHeader"></div>
+
+    <!-- PLAN PICKER (shown when coming directly from exam, not pricing) -->
+    <div id="planPickerSection" style="margin-bottom:2rem;display:none;">
+      <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--blue);margin-bottom:0.8rem;">Step 1 — Choose Your Plan</div>
+      <div class="plan-banner" id="planPickerBanner">
+        <div class="plan-chip" id="pc-explorer" onclick="selectPlanChip('Explorer',99,this)">
+          <div class="pc-name">Explorer</div>
+          <div class="pc-price">₹99</div>
+          <div class="pc-desc">2 months · Try TruePrep</div>
+        </div>
+        <div class="plan-chip plan-featured" id="pc-achiever" onclick="selectPlanChip('Achiever',199,this)">
+          <div class="pc-badge">Popular</div>
+          <div class="pc-name">Achiever</div>
+          <div class="pc-price">₹199</div>
+          <div class="pc-desc">5 months · Best value</div>
+        </div>
+        <div class="plan-chip" id="pc-topper" onclick="selectPlanChip('Topper',599,this)">
+          <div class="pc-name">Topper</div>
+          <div class="pc-price">₹599</div>
+          <div class="pc-desc">12 months · Full access</div>
+        </div>
+      </div>
+      <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--blue);margin-bottom:0.8rem;margin-top:1.5rem;">Step 2 — Choose Your Mentor</div>
+    </div>
+
+    <!-- MENTOR CARDS -->
     <div id="mpContent"></div>
   </div>
 </div>
@@ -912,10 +1083,10 @@ footer{background:var(--bg3);padding:2.2rem 3rem;border-top:1px solid var(--bord
       <!-- SUCCESS -->
       <div class="if-step" id="step5">
         <div class="if-success">
-          <div class="succ-icon">🎉</div>
-          <h3>You're All Set!</h3>
-          <p>Your answers have been noted. You'll now be redirected to our booking form to schedule your session with your mentor.</p>
-          <button class="btn-primary" onclick="goToZohoBooking()">Open Booking Form →</button>
+          <div class="succ-icon">✅</div>
+          <h3>Got it! One Last Step.</h3>
+          <p>Your answers have been saved. Now meet your mentor and confirm your booking.</p>
+          <button class="btn-primary" style="margin-top:1rem;" onclick="goToZohoBooking()">🔥 Meet My Mentor & Confirm →</button>
           <br/><br/>
           <button class="btn-ghost" onclick="closePage('intakePage')">Back to Home</button>
         </div>
@@ -1178,8 +1349,126 @@ footer{background:var(--bg3);padding:2.2rem 3rem;border-top:1px solid var(--bord
 </div>
 
 <!-- ============================================================
+     PAGE: MENTOR CONFIRMATION
+============================================================ -->
+<div class="overlay-page confirm-page-bg" id="confirmPage">
+  <div class="op-inner" style="max-width:600px;padding-top:1.5rem;">
+    <button class="op-back" onclick="closePage('confirmPage');openPage('mentorPage')">← Back to Mentors</button>
+
+    <!-- HYPE HERO -->
+    <div class="confirm-hero" style="border-radius:20px;margin-bottom:1.5rem;">
+      <span class="confirm-fire">🔥</span>
+      <div class="confirm-headline">You're One Step Away From<br/><span>Changing Your Rank Forever.</span></div>
+      <div class="confirm-subline">You found a mentor who has been exactly where you are. They didn't quit. They cracked it. Now they're here for YOU.</div>
+    </div>
+
+    <!-- MENTOR CARD -->
+    <div class="confirm-mentor-card">
+      <div class="confirm-mentor-top">
+        <div class="confirm-avatar" id="confirmAvatar">?</div>
+        <div>
+          <div class="confirm-mentor-name" id="confirmName">Mentor Name</div>
+          <div class="confirm-mentor-cred" id="confirmCred">Credential</div>
+        </div>
+      </div>
+      <div class="confirm-story" id="confirmStory">Mentor story goes here.</div>
+      <div class="confirm-tags" id="confirmTagsEl"></div>
+    </div>
+
+    <!-- HYPE QUESTION -->
+    <div class="confirm-hype-box">
+      <div class="hype-q">Does this story resonate with you? 👆</div>
+      <div class="hype-sub">This mentor has been in your exact position — same doubts, same pressure, same exam. They cracked it. They know the exact path. Are you ready to let them show you yours?</div>
+    </div>
+
+    <!-- SESSION DETAILS -->
+    <div class="confirm-session-details">
+      <div class="confirm-detail-row">
+        <span class="confirm-detail-label">Mentor</span>
+        <span class="confirm-detail-value" id="confirmDetailName">—</span>
+      </div>
+      <div class="confirm-detail-row">
+        <span class="confirm-detail-label">Exam</span>
+        <span class="confirm-detail-value" id="confirmDetailExam">—</span>
+      </div>
+      <div class="confirm-detail-row">
+        <span class="confirm-detail-label">Session Type</span>
+        <span class="confirm-detail-value" id="confirmDetailSession">—</span>
+      </div>
+      <div class="confirm-detail-row">
+        <span class="confirm-detail-label">Plan</span>
+        <span class="confirm-detail-value" id="confirmDetailPlan">Achiever — ₹199</span>
+      </div>
+      <div class="confirm-detail-row">
+        <span class="confirm-detail-label">Amount</span>
+        <span class="confirm-detail-value confirm-detail-price" id="confirmDetailPrice">₹199</span>
+      </div>
+    </div>
+
+    <!-- CTA BUTTONS -->
+    <div class="confirm-actions">
+      <button class="btn-pay" id="payBtn" onclick="initiatePayment()">
+        <span>✅ &nbsp;YES! I Resonate — Let's Go!</span>
+        <span class="btn-pay-sub">Secure payment via Razorpay</span>
+      </button>
+      <button class="btn-ghost" onclick="closePage('confirmPage');openPage('examPickerPage')" style="justify-content:center;">
+        🔄 Choose a Different Mentor
+      </button>
+      <div class="confirm-secure">🔒 100% secure · UPI · Cards · Net Banking · Wallets</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     PAGE: PAYMENT SUCCESS
+============================================================ -->
+<div class="overlay-page" id="successPage">
+  <div class="success-page-inner">
+    <div class="success-blast">🎉</div>
+    <div class="success-title">Payment Done!<br/>Your Journey <span>Starts Now.</span></div>
+    <p class="success-sub">You just made the best investment of your prep journey. Your mentor has been notified and will reach out to schedule your first session.</p>
+
+    <div class="success-order-box">
+      <div class="sob-label">Booking Reference</div>
+      <div class="sob-id" id="successOrderId">TP-2025-XXXXXX</div>
+    </div>
+
+    <div class="next-steps">
+      <h3>🗺️ What Happens Next</h3>
+      <div class="next-step-item">
+        <div class="ns-num">1</div>
+        <div class="ns-text"><strong>Check your WhatsApp / Email</strong>We'll send your booking confirmation and mentor's contact within 2 hours.</div>
+      </div>
+      <div class="next-step-item">
+        <div class="ns-num">2</div>
+        <div class="ns-text"><strong>Your mentor will reach out</strong>They'll confirm a time slot that works for both of you for your first session.</div>
+      </div>
+      <div class="next-step-item">
+        <div class="ns-num">3</div>
+        <div class="ns-text"><strong>Prepare 3 questions before the session</strong>Think about your biggest doubts, weak areas, and what you want from this session. The more specific, the better your mentor can help.</div>
+      </div>
+      <div class="next-step-item">
+        <div class="ns-num">4</div>
+        <div class="ns-text"><strong>Show up. Be honest. Trust the process.</strong>Your mentor cracked this exam. Follow their advice. Your rank will follow.</div>
+      </div>
+    </div>
+
+    <button class="btn-primary" style="width:100%;justify-content:center;margin-bottom:1rem;" onclick="closeAllPages()">
+      Back to TruePrep →
+    </button>
+    <button class="btn-ghost" style="width:100%;justify-content:center;" onclick="openPage('examPickerPage')">
+      Book Another Mentor
+    </button>
+  </div>
+</div>
+
+
+<!-- ============================================================
      JAVASCRIPT
 ============================================================ -->
+<!-- Razorpay SDK -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
 /* ---- AIRTABLE CONFIG — REPLACE WITH YOUR OWN KEYS ---- */
 const AIRTABLE_BASE_ID = 'YOUR_BASE_ID';        // e.g. appXXXXXXXXXXXXXX
@@ -1350,6 +1639,21 @@ function openMentorPage(examKey){
     <p class="mp-desc">${data.desc}</p>
   `;
 
+  // Show plan picker only if user didn't come from pricing page
+  const planSection = document.getElementById('planPickerSection');
+  if(!cameFromPricing){
+    planSection.style.display = 'block';
+    // default select Achiever
+    selectedPlanName = 'Achiever';
+    selectedPlanPrice = 199;
+    currentPlanPrice = 199;
+    document.getElementById('pc-achiever').classList.add('selected');
+  } else {
+    planSection.style.display = 'none';
+  }
+  // reset for next visit
+  cameFromPricing = false;
+
   let content='';
   if(data.mentors&&data.mentors.length>0){
     content='<div class="mp-mentor-grid">';
@@ -1366,7 +1670,9 @@ function openMentorPage(examKey){
           </div>
           <div class="mentor-bio">${m.bio}</div>
           <div class="mentor-tags">${tags}</div>
-          <button class="btn-primary" style="width:100%;margin-top:1.2rem;justify-content:center;" onclick="openIntakeForm('${examKey}','${m.name}')">Book a Session →</button>
+          <button class="btn-primary" style="width:100%;margin-top:1.2rem;justify-content:center;" onclick="openIntakeForm('${examKey}','${m.name}')">
+            Book ${m.name.split(' ')[0]} →
+          </button>
         </div>
       `;
     });
@@ -1432,9 +1738,8 @@ function updateProgress(n){
 }
 async function submitIntake(){
   nextStep(5);
-  // Get student name/phone from a quick prompt — or send what we have
-  const fields = {
-    'Name': currentMentorName ? `Student → ${currentMentorName}` : 'Student',
+  // Save to Airtable
+  const fields={
     'Exam': currentExamKey,
     'Mentor Requested': currentMentorName,
     'Target Year': intakeData.year,
@@ -1448,8 +1753,171 @@ async function submitIntake(){
 }
 
 function goToZohoBooking(){
-  window.open('ZOHO_MENTOR_BOOKING_FORM','_blank');
+  // Now opens confirmation page instead
+  closePage('intakePage');
+  openConfirmPage();
 }
+
+/* ---- CONFIRMATION PAGE ---- */
+let currentMentorData = {};
+let currentPlanPrice = 199; // default Achiever plan
+
+function openConfirmPage(){
+  const examData = mentorData[currentExamKey];
+  const mentor = examData ? examData.mentors.find(m => m.name === currentMentorName) : null;
+
+  // Fill mentor card
+  document.getElementById('confirmAvatar').textContent = mentor ? mentor.init : '?';
+  document.getElementById('confirmName').textContent = currentMentorName;
+  document.getElementById('confirmCred').textContent = mentor ? mentor.cred : '';
+  document.getElementById('confirmStory').textContent = mentor ? mentor.bio : '';
+
+  // Tags
+  const tagsEl = document.getElementById('confirmTagsEl');
+  tagsEl.innerHTML = mentor ? mentor.tags.map(t=>`<span class="confirm-tag">${t}</span>`).join('') : '';
+
+  // Detail rows
+  document.getElementById('confirmDetailName').textContent = currentMentorName;
+  document.getElementById('confirmDetailExam').textContent = currentExamKey.toUpperCase();
+
+  const sessionLabels = {
+    'strategy':'Full Strategy Roadmap',
+    'doubt':'Subject Doubt Clearing',
+    'mock-interview':'Mock Interview',
+    'motivation':'Motivation & Mindset',
+    'not-sure':'Mentor Will Suggest'
+  };
+  document.getElementById('confirmDetailSession').textContent = sessionLabels[intakeData.session] || 'Session';
+  document.getElementById('confirmDetailPlan').textContent = `${selectedPlanName} Plan — ₹${selectedPlanPrice}`;
+  document.getElementById('confirmDetailPrice').textContent = `₹${selectedPlanPrice}`;
+
+  currentMentorData = mentor || {};
+  openPage('confirmPage');
+}
+
+/* ---- RAZORPAY PAYMENT ---- */
+/* 
+  RAZORPAY SETUP:
+  1. Sign up at razorpay.com
+  2. Get your Key ID from Dashboard → Settings → API Keys
+  3. Replace 'YOUR_RAZORPAY_KEY_ID' below with your actual key (starts with rzp_live_ or rzp_test_)
+  
+  NOTE: For real payments you need a backend to create orders.
+  For testing, use rzp_test_ key — no real money charged.
+*/
+const RAZORPAY_KEY = 'YOUR_RAZORPAY_KEY_ID'; // e.g. rzp_test_XXXXXXXXXXXXXXXX
+
+function initiatePayment(){
+  const btn = document.getElementById('payBtn');
+  btn.textContent = '⏳ Opening Payment...';
+  btn.disabled = true;
+
+  const options = {
+    key: RAZORPAY_KEY,
+    amount: currentPlanPrice * 100, // Razorpay takes amount in paise (₹199 = 19900 paise)
+    currency: 'INR',
+    name: 'TruePrep',
+    description: `Session with ${currentMentorName} — ${currentExamKey.toUpperCase()}`,
+    image: '', // add your logo URL here
+    prefill:{
+      name: '',
+      email: '',
+      contact: ''
+    },
+    notes:{
+      mentor: currentMentorName,
+      exam: currentExamKey,
+      session_type: intakeData.session
+    },
+    theme:{
+      color: '#2563EB'
+    },
+    handler: async function(response){
+      // Payment SUCCESS
+      const orderId = response.razorpay_payment_id;
+
+      // Save payment to Airtable
+      await sendToAirtable('Session Bookings',{
+        'Name': 'Student',
+        'Exam': currentExamKey,
+        'Mentor Requested': currentMentorName,
+        'Target Year': intakeData.year,
+        'Prep Level': intakeData.level,
+        'Challenges': intakeData.issues.join(', '),
+        'Session Type': intakeData.session,
+        'Status': 'Booked',
+        'Submitted At': new Date().toISOString(),
+        'Source': 'Razorpay Payment — ' + orderId
+      });
+
+      // Show success page
+      document.getElementById('successOrderId').textContent = 'TP-' + orderId.slice(-8).toUpperCase();
+      closePage('confirmPage');
+      openPage('successPage');
+    },
+    modal:{
+      ondismiss: function(){
+        btn.innerHTML = '✅ &nbsp;YES! I Resonate — Let\'s Go! <span class="btn-pay-sub">Secure payment via Razorpay</span>';
+        btn.disabled = false;
+      }
+    }
+  };
+
+  try{
+    const rzp = new Razorpay(options);
+    rzp.on('payment.failed', function(response){
+      btn.innerHTML = '✅ &nbsp;YES! I Resonate — Let\'s Go! <span class="btn-pay-sub">Secure payment via Razorpay</span>';
+      btn.disabled = false;
+      alert('Payment failed. Please try again.');
+    });
+    rzp.open();
+  } catch(e){
+    btn.innerHTML = '✅ &nbsp;YES! I Resonate — Let\'s Go! <span class="btn-pay-sub">Secure payment via Razorpay</span>';
+    btn.disabled = false;
+    alert('Could not open payment. Make sure Razorpay key is set correctly.');
+  }
+}
+
+/* ---- PLAN SELECTION ---- */
+let selectedPlanName = 'Achiever';
+let selectedPlanPrice = 199;
+let cameFromPricing = false;
+
+function selectPlanAndPick(planName, planPrice){
+  selectedPlanName = planName;
+  selectedPlanPrice = planPrice;
+  currentPlanPrice = planPrice;
+  cameFromPricing = true;
+  // Show pill in exam picker
+  const pill = document.getElementById('examPickerPlanPill');
+  document.getElementById('examPickerPlanText').textContent = `✅ ${planName} Plan — ₹${planPrice} selected`;
+  pill.classList.add('show');
+  openPage('examPickerPage');
+}
+
+function changePlan(){
+  closePage('examPickerPage');
+  // scroll to pricing
+  document.getElementById('pricing').scrollIntoView({behavior:'smooth'});
+}
+
+function selectPlanChip(planName, planPrice, el){
+  selectedPlanName = planName;
+  selectedPlanPrice = planPrice;
+  currentPlanPrice = planPrice;
+  // update chip styles
+  document.querySelectorAll('.plan-chip').forEach(c=>{
+    c.classList.remove('selected');
+    if(c.id === 'pc-achiever') c.classList.add('plan-featured');
+  });
+  el.classList.add('selected');
+}
+
+function closeAllPages(){
+  document.querySelectorAll('.overlay-page').forEach(p=>p.classList.remove('open'));
+  document.body.style.overflow='';
+}
+
 
 /* ---- WAITLIST SUBMIT ---- */
 async function submitWaitlist(){
