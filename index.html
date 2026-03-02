@@ -502,6 +502,7 @@ footer{background:var(--bg3);padding:2.2rem 3rem;border-top:1px solid var(--bord
       <li><button onclick="openPage('storyPage')">Our Story</button></li>
       <li><button onclick="openPage('verifyPage')">Mentor Selection</button></li>
       <li><a href="#pricing">Pricing</a></li>
+      <li><button onclick="openPage('waitlistPage')">🔔 Waitlist</button></li>
       <li><button class="nav-book-btn" onclick="openPage('examPickerPage')">📅 Book a Mentor</button></li>
       <li><a href="#pricing" class="nav-cta">Join Now</a></li>
     </ul>
@@ -679,7 +680,8 @@ footer{background:var(--bg3);padding:2.2rem 3rem;border-top:1px solid var(--bord
   <div><div class="footer-logo">True<span>Prep</span></div><div class="footer-tagline">Invest in Your Rank.</div></div>
   <div class="footer-links">
     <a href="#" onclick="openPage('storyPage');return false;">Our Story</a>
-    <a href="#" onclick="openPage('verifyPage');return false;">Become a Mentor</a>
+    <a href="#" onclick="openPage('mentorApplyPage');return false;">Become a Mentor</a>
+    <a href="#" onclick="openPage('waitlistPage');return false;">Join Waitlist</a>
     <a href="#">Contact</a>
     <a href="#">Privacy</a>
   </div>
@@ -1059,16 +1061,141 @@ footer{background:var(--bg3);padding:2.2rem 3rem;border-top:1px solid var(--bord
         <h3>Are You a Topper? Become a Mentor.</h3>
         <p>Cleared UPSC, NEET, JEE, CAT, SSC, or any state exam? Help the next batch. Fill our mentor intake form.</p>
       </div>
-      <button class="btn-primary" onclick="window.open('ZOHO_MENTOR_INTAKE_FORM','_blank')">Apply as Mentor →</button>
+      <button class="btn-primary" onclick="closePage('verifyPage');openPage('mentorApplyPage')">Apply as Mentor →</button>
     </div>
   </div>
 </div>
 
 
 <!-- ============================================================
+     WAITLIST PAGE
+============================================================ -->
+<div class="overlay-page" id="waitlistPage">
+  <div class="op-inner" style="max-width:600px;">
+    <button class="op-back" onclick="closePage('waitlistPage')">← Back to TruePrep</button>
+    <div class="mp-exam-badge">🚀 Early Access</div>
+    <div class="mp-title">Join the Waitlist</div>
+    <p class="mp-desc">Be first to know when we launch in your city. Early members get priority mentor access and a special founding price.</p>
+    <div id="waitlistFormWrap">
+      <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem;">
+        <div>
+          <label style="font-size:0.8rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:0.4rem;">Full Name *</label>
+          <input id="wl_name" type="text" placeholder="Your name" style="width:100%;padding:0.8rem 1rem;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.92rem;background:var(--bg3);color:var(--text);outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'"/>
+        </div>
+        <div>
+          <label style="font-size:0.8rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:0.4rem;">Phone Number *</label>
+          <input id="wl_phone" type="tel" placeholder="+91 XXXXX XXXXX" style="width:100%;padding:0.8rem 1rem;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.92rem;background:var(--bg3);color:var(--text);outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'"/>
+        </div>
+        <div>
+          <label style="font-size:0.8rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:0.4rem;">Email *</label>
+          <input id="wl_email" type="email" placeholder="your@email.com" style="width:100%;padding:0.8rem 1rem;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.92rem;background:var(--bg3);color:var(--text);outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'"/>
+        </div>
+        <div>
+          <label style="font-size:0.8rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:0.4rem;">Which exam are you preparing for?</label>
+          <select id="wl_exam" style="width:100%;padding:0.8rem 1rem;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.92rem;background:var(--bg3);color:var(--text);outline:none;">
+            <option value="">Select your exam</option>
+            <option>UPSC CSE</option><option>BPSC</option><option>JPSC</option><option>JSSC</option>
+            <option>SSC CGL</option><option>SSC CHSL</option><option>SSC GD</option>
+            <option>NEET UG</option><option>JEE Main/Advanced</option><option>CAT</option>
+            <option>CLAT</option><option>GATE</option><option>IBPS PO</option><option>SBI PO</option>
+            <option>NDA / CDS</option><option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:0.8rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:0.4rem;">City</label>
+          <input id="wl_city" type="text" placeholder="e.g. Patna, Ranchi, Delhi..." style="width:100%;padding:0.8rem 1rem;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.92rem;background:var(--bg3);color:var(--text);outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'"/>
+        </div>
+      </div>
+      <div id="wl_error" style="color:#ef4444;font-size:0.82rem;margin-bottom:0.8rem;display:none;"></div>
+      <button class="btn-primary" style="width:100%;justify-content:center;padding:1rem;" onclick="submitWaitlist()">🚀 Join Waitlist</button>
+      <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.8rem;text-align:center;">No spam. Just one email when we launch. Promise.</p>
+    </div>
+    <div id="waitlistSuccess" style="display:none;text-align:center;padding:2rem 0;">
+      <div style="font-size:3rem;margin-bottom:1rem;">🎉</div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--text);margin-bottom:0.5rem;">You're on the list!</h3>
+      <p style="font-size:0.9rem;color:var(--text-muted);line-height:1.7;">We'll notify you the moment we're live. You're among our founding members — that means priority access and a special price.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MENTOR APPLICATION PAGE
+============================================================ -->
+<div class="overlay-page" id="mentorApplyPage">
+  <div class="op-inner" style="max-width:640px;">
+    <button class="op-back" onclick="closePage('mentorApplyPage')">← Back to TruePrep</button>
+    <div class="mp-exam-badge">🎓 Become a Mentor</div>
+    <div class="mp-title">Apply to Mentor on TruePrep</div>
+    <p class="mp-desc">Have you cleared UPSC, NEET, JEE, SSC, or any competitive exam? Help the next batch. Share your real story. Earn while you guide.</p>
+    <div id="mentorFormWrap">
+      <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+          <div>
+            <label style="font-size:0.8rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:0.4rem;">Full Name *</label>
+            <input id="ma_name" type="text" placeholder="Your name" style="width:100%;padding:0.8rem 1rem;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.88rem;background:var(--bg3);color:var(--text);outline:none;" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'"/>
+          </div>
+          <div>
+            <label style="font-size:0.8rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:0.4rem;">Phone *</label>
+            <input id="ma_phone" type="tel" placeholder="+91 XXXXX XXXXX" style="width:100%;padding:0.8rem 1rem;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.88rem;background:var(--bg3);color:var(--text);outline:none;" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'"/>
+          </div>
+        </div>
+        <div>
+          <label style="font-size:0.8rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:0.4rem;">Email *</label>
+          <input id="ma_email" type="email" placeholder="your@email.com" style="width:100%;padding:0.8rem 1rem;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.88rem;background:var(--bg3);color:var(--text);outline:none;" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'"/>
+        </div>
+        <div>
+          <label style="font-size:0.8rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:0.4rem;">Which exam(s) have you cleared? *</label>
+          <input id="ma_exams" type="text" placeholder="e.g. UPSC CSE 2021, BPSC 2022" style="width:100%;padding:0.8rem 1rem;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.88rem;background:var(--bg3);color:var(--text);outline:none;" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'"/>
+        </div>
+        <div>
+          <label style="font-size:0.8rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:0.4rem;">Current Role / Position *</label>
+          <input id="ma_role" type="text" placeholder="e.g. IPS Officer, MBBS Final Year, SC Advocate" style="width:100%;padding:0.8rem 1rem;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.88rem;background:var(--bg3);color:var(--text);outline:none;" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'"/>
+        </div>
+        <div>
+          <label style="font-size:0.8rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:0.4rem;">How many hours/week can you mentor?</label>
+          <select id="ma_hours" style="width:100%;padding:0.8rem 1rem;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.88rem;background:var(--bg3);color:var(--text);outline:none;">
+            <option>1–3 hours/week</option>
+            <option>3–6 hours/week</option>
+            <option>6–10 hours/week</option>
+            <option>10+ hours/week</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:0.8rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:0.4rem;">Why do you want to mentor? (brief)</label>
+          <textarea id="ma_why" rows="3" placeholder="Share your motivation in a few lines..." style="width:100%;padding:0.8rem 1rem;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.88rem;background:var(--bg3);color:var(--text);outline:none;resize:vertical;" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+        </div>
+      </div>
+      <div id="ma_error" style="color:#ef4444;font-size:0.82rem;margin-bottom:0.8rem;display:none;"></div>
+      <button class="btn-primary" style="width:100%;justify-content:center;padding:1rem;" onclick="submitMentorApp()">Submit Application →</button>
+      <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.8rem;text-align:center;">We review all applications within 48 hours and reach out personally.</p>
+    </div>
+    <div id="mentorAppSuccess" style="display:none;text-align:center;padding:2rem 0;">
+      <div style="font-size:3rem;margin-bottom:1rem;">🙌</div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--text);margin-bottom:0.5rem;">Application Received!</h3>
+      <p style="font-size:0.9rem;color:var(--text-muted);line-height:1.7;">Our team will review your application and reach out within 48 hours. Thank you for wanting to give back.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
      JAVASCRIPT
 ============================================================ -->
 <script>
+/* ---- AIRTABLE CONFIG — REPLACE WITH YOUR OWN KEYS ---- */
+const AIRTABLE_BASE_ID = 'YOUR_BASE_ID';        // e.g. appXXXXXXXXXXXXXX
+const AIRTABLE_API_KEY = 'YOUR_AIRTABLE_TOKEN';  // e.g. patXXXXXXXXXXXXXX
+
+async function sendToAirtable(tableName, fields){
+  try{
+    const res = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(tableName)}`,{
+      method:'POST',
+      headers:{'Authorization':`Bearer ${AIRTABLE_API_KEY}`,'Content-Type':'application/json'},
+      body: JSON.stringify({records:[{fields}]})
+    });
+    return res.ok;
+  } catch(e){ return false; }
+}
+
 /* ---- CURSOR (desktop only) ---- */
 if(window.innerWidth>768){
   const cursor=document.getElementById('cursor'),trail=document.getElementById('cursorTrail');
@@ -1303,11 +1430,85 @@ function updateProgress(n){
     if(dot)dot.classList.toggle('done',i<=n);
   }
 }
-function submitIntake(){
+async function submitIntake(){
   nextStep(5);
+  // Get student name/phone from a quick prompt — or send what we have
+  const fields = {
+    'Name': currentMentorName ? `Student → ${currentMentorName}` : 'Student',
+    'Exam': currentExamKey,
+    'Mentor Requested': currentMentorName,
+    'Target Year': intakeData.year,
+    'Prep Level': intakeData.level,
+    'Challenges': intakeData.issues.join(', '),
+    'Session Type': intakeData.session,
+    'Submitted At': new Date().toISOString(),
+    'Source': 'Session Booking Form'
+  };
+  await sendToAirtable('Session Bookings', fields);
 }
+
 function goToZohoBooking(){
   window.open('ZOHO_MENTOR_BOOKING_FORM','_blank');
+}
+
+/* ---- WAITLIST SUBMIT ---- */
+async function submitWaitlist(){
+  const name  = document.getElementById('wl_name').value.trim();
+  const phone = document.getElementById('wl_phone').value.trim();
+  const email = document.getElementById('wl_email').value.trim();
+  const exam  = document.getElementById('wl_exam').value;
+  const city  = document.getElementById('wl_city').value.trim();
+  const err   = document.getElementById('wl_error');
+  if(!name||!phone||!email){ err.textContent='Please fill in Name, Phone and Email.'; err.style.display='block'; return; }
+  err.style.display='none';
+  const btn = event.target;
+  btn.textContent='Saving...'; btn.disabled=true;
+  const ok = await sendToAirtable('Waitlist', {
+    'Name': name, 'Phone': phone, 'Email': email,
+    'Exam': exam, 'City': city,
+    'Submitted At': new Date().toISOString(),
+    'Source': 'Waitlist Form'
+  });
+  btn.textContent='🚀 Join Waitlist'; btn.disabled=false;
+  if(ok){
+    document.getElementById('waitlistFormWrap').style.display='none';
+    document.getElementById('waitlistSuccess').style.display='block';
+  } else {
+    err.textContent='Something went wrong. Please check your internet and try again.';
+    err.style.display='block';
+  }
+}
+
+/* ---- MENTOR APPLICATION SUBMIT ---- */
+async function submitMentorApp(){
+  const name  = document.getElementById('ma_name').value.trim();
+  const phone = document.getElementById('ma_phone').value.trim();
+  const email = document.getElementById('ma_email').value.trim();
+  const exams = document.getElementById('ma_exams').value.trim();
+  const role  = document.getElementById('ma_role').value.trim();
+  const hours = document.getElementById('ma_hours').value;
+  const why   = document.getElementById('ma_why').value.trim();
+  const err   = document.getElementById('ma_error');
+  if(!name||!phone||!email||!exams||!role){ err.textContent='Please fill in all required fields (marked *).'; err.style.display='block'; return; }
+  err.style.display='none';
+  const btn = event.target;
+  btn.textContent='Submitting...'; btn.disabled=true;
+  const ok = await sendToAirtable('Mentor Applications', {
+    'Name': name, 'Phone': phone, 'Email': email,
+    'Exams Cleared': exams, 'Current Role': role,
+    'Hours Per Week': hours, 'Why Mentor': why,
+    'Status': 'New Application',
+    'Submitted At': new Date().toISOString(),
+    'Source': 'Mentor Application Form'
+  });
+  btn.textContent='Submit Application →'; btn.disabled=false;
+  if(ok){
+    document.getElementById('mentorFormWrap').style.display='none';
+    document.getElementById('mentorAppSuccess').style.display='block';
+  } else {
+    err.textContent='Something went wrong. Please check your internet and try again.';
+    err.style.display='block';
+  }
 }
 </script>
 </body>
